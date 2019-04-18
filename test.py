@@ -37,8 +37,7 @@ followers = browser.find_element_by_partial_link_text(" followers")
 followers.click()
 
 time.sleep(2)
-f_box = browser.find_element_by_xpath("//div[@class='isgrP']")
-browser.execute_script("""function sleep(ms) {
+scroll_script = """function sleep(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));
 }
 
@@ -55,9 +54,12 @@ async function scroller() {
         }
     }
 }
-scroller()""")
+scroller()"""
 
-time.sleep(30)
+f_box = browser.find_element_by_xpath("//div[@class='isgrP']")
+browser.execute_script(scroll_script)
+
+time.sleep(100)
 a_followers = browser.find_elements_by_xpath("//div/div/div/div/a")
 followers_list = []
 for elm in a_followers:
@@ -70,3 +72,28 @@ close_btn = browser.find_element_by_xpath("//span[@aria-label='Close']")
 close_btn.click()
 
 time.sleep(2)
+following = browser.find_element_by_partial_link_text(" following")
+following.click()
+
+fl_box = browser.find_element_by_xpath("//div[@class='isgrP']")
+browser.execute_script(scroll_script)
+
+time.sleep(100)
+a_following = browser.find_elements_by_xpath("//div/div/div/div/a")
+following_list = []
+for elm in a_following:
+    if elm.text != '':
+        following_list.append(elm.text)
+print()
+print(following_list)
+
+time.sleep(2)
+close_btn = browser.find_element_by_xpath("//span[@aria-label='Close']")
+close_btn.click()
+
+f_diff = list(set(following_list)-set(followers_list))
+print()
+print("=============================================================================================")
+print ("Final results")
+print (f_diff)
+print("=============================================================================================")
